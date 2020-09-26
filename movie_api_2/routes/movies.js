@@ -25,6 +25,16 @@ router.get('/', function(req, res, next) {
     });
 });
 
+/* Filmler top10 listesi */
+router.get('/top10' , (req,res)=> {
+    const promise = Movie.find({}).limit(10).sort({imdb_score : -1});
+    promise.then((data)=> {
+        res.json(data);
+    }).catch((error)=> {
+        res.json(error);
+    })
+});
+
 /* id ye göre film listeleme */
 router.get('/:movie_id' , (req,res)=> {
     const promise = MovieModel.findById(req.params.movie_id);
