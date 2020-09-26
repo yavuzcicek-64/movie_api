@@ -66,4 +66,15 @@ router.delete('/:movie_id', (req,res)=> {
     })
 });
 
+/* yıl aralıklarına göre film listeleme */
+router.get('/between/:start_year/:end_year' , (req,res)=> {
+    const {start_year , end_year} = req.params;
+    const promise = Movie.find({year : {'$gte' : start_year, '$lte' : end_year}}).sort({imdb_score: -1});
+    promise.then((data)=> {
+        res.json(data);
+    }).catch((error)=> {
+        res.json(error);
+    })
+});
+
 module.exports = router;
