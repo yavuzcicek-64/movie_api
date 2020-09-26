@@ -36,7 +36,7 @@ router.get('/:movie_id' , (req,res)=> {
     });
 });
 
-/* id ye göre film güncelleme */
+/* Film güncelleme */
 router.put('/:movie_id' , (req,res)=> {
     const promise  = Movie.findByIdAndUpdate(req.params.movie_id , req.body , {new :true});
     promise.then((data)=> {
@@ -46,5 +46,14 @@ router.put('/:movie_id' , (req,res)=> {
     })
 });
 
+/* Film Silme */
+router.delete('/:movie_id', (req,res)=> {
+    const promise = Movie.findByIdAndDelete(req.params.movie_id);
+    promise.then((data)=> {
+        res.json({status : 1});
+    }).catch((error)=> {    
+        res.json(error);
+    })
+});
 
 module.exports = router;
