@@ -36,5 +36,15 @@ router.get('/:movie_id' , (req,res)=> {
     });
 });
 
+/* id ye göre film güncelleme */
+router.put('/:movie_id' , (req,res)=> {
+    const promise  = Movie.findByIdAndUpdate(req.params.movie_id , req.body , {new :true});
+    promise.then((data)=> {
+        res.json(data);
+    }).catch((error)=> {
+        res.json(error);
+    })
+});
+
 
 module.exports = router;
