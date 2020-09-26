@@ -25,4 +25,16 @@ router.get('/', function(req, res, next) {
     });
 });
 
+/* id ye göre film listeleme */
+router.get('/:movie_id' , (req,res)=> {
+    const promise = MovieModel.findById(req.params.movie_id);
+
+    promise.then((movie_id)=> {
+        res.json(movie_id);
+    }).catch((error)=>{
+        res.json(error);
+    });
+});
+
+
 module.exports = router;
