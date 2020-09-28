@@ -131,6 +131,14 @@ router.put('/:director_id' , (req,res)=> {
     })
 });
 
-
+/*YÖNETMEN DELETE İŞLEMLERİ */
+router.delete('/:director_id', (req,res)=> {
+    const promise = DirectorModel.findByIdAndDelete(req.params.director_id);
+    promise.then((data)=> {
+        res.json({status :1});
+    }).catch((error)=> {
+        res.json(error);
+    })
+});
 
 module.exports = router;
