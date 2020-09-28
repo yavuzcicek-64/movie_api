@@ -141,4 +141,55 @@ router.delete('/:director_id', (req,res)=> {
     })
 });
 
+
+/*yönetmenin en iyi 10 filmi */
+router.get('/:director_id/best10movie' , (req,res)=> {
+    const promise = DirectorModel.aggregate([
+        {
+            $match :  {
+                '_id' :  mongoose.Types.ObjectId(req.params.director_id)
+            } 
+        },
+        {
+            $lookup : {
+                from : 'movies',
+                localField : '_id',
+                foreignField : 'director_id',
+                as : 'movies'
+            }
+        },
+        {
+            $unwind : {
+                path : '$movies',                
+            }
+        },
+        {
+            $sort : {'movies.imdb_score' : -1}
+        },
+        {
+            $group : {
+                _id : {
+                    _id :'$_id',
+                    name : '$name',
+                    surname :'$surname',
+                    bio : '$bio'            
+                },
+                movies : {
+                    $push : '$movies'
+                }
+            }
+        },
+        {
+            $project:  {                        
+                movies : '$movies'          
+            }
+        }
+    ]);
+    promise.then((data)=> {
+        res.json(data);
+    }).catch((error)=> {
+        res.json(error);
+    })
+});
+
 module.exports = router;
