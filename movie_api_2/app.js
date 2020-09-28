@@ -6,7 +6,6 @@ var logger = require('morgan');
 require('./helper/db')();
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var moviesRouter = require('./routes/movies');
 var directorRouter = require('./routes/directors');
 
@@ -23,7 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/directors', directorRouter);
 
