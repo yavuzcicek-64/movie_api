@@ -146,44 +146,53 @@ router.delete('/:director_id', (req,res)=> {
 router.get('/:director_id/best10movie' , (req,res)=> {
     const promise = DirectorModel.aggregate([
         {
-            $match :  {
-                '_id' :  mongoose.Types.ObjectId(req.params.director_id)
-            } 
+            $match : {
+                _id : mongoose.Types.ObjectId(req.params.director_id)
+            }           
         },
         {
             $lookup : {
                 from : 'movies',
                 localField : '_id',
-                foreignField : 'director_id',
-                as : 'movies'
+                foreignField :'director_id',
+                as  : 'movies'
             }
         },
         {
             $unwind : {
-                path : '$movies',                
+                path : '$movies',
+                preserveNullAndEmptyArrays:  true
             }
         },
         {
-            $sort : {'movies.imdb_score' : -1}
+            $sort : { 'movies.imdb_score' : -1}
+        },
+        {
+            $limit: 10
         },
         {
             $group : {
                 _id : {
-                    _id :'$_id',
-                    name : '$name',
-                    surname :'$surname',
-                    bio : '$bio'            
+                    _id : '$_id',
+                    name :'$name',
+                    surname: '$surname',
+                    bio :'$bio'
                 },
-                movies : {
-                    $push : '$movies'
+                movies: {
+                    $push: '$movies'
                 }
-            }
+            },
         },
         {
-            $project:  {                        
-                movies : '$movies'          
+            $project : {
+                _id     : '$_id._id',
+                name    : '$_id.name',
+                surname : '$_id.surname',
+                bio     : '$_id.bio',
+                movies  : '$movies'
             }
         }
+        
     ]);
     promise.then((data)=> {
         res.json(data);
