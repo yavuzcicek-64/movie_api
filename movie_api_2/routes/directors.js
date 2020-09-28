@@ -4,6 +4,8 @@ var router = express.Router();
 
 const DirectorModel = require('../models/Director');
 
+
+
 /* Film yönetmeni ekleme */
 router.post('/', function(req, res, next) {
     const director = new DirectorModel(req.body);
@@ -118,8 +120,16 @@ router.get('/:director_id' , (req,res)=> {
     })
 });
 
+/* yönetmen update */
+router.put('/:director_id' , (req,res)=> {
+    const promise = DirectorModel.findByIdAndUpdate(req.params.director_id , req.body, {new :true});
 
-
+    promise.then((data)=> {
+        res.json(data);
+    }).catch((error)=> {
+        res.json(error);
+    })
+});
 
 
 
