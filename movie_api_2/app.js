@@ -3,13 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+//db bağlantı
 require('./helper/db')();
+
+
+
 
 var indexRouter = require('./routes/index');
 var moviesRouter = require('./routes/movies');
 var directorRouter = require('./routes/directors');
 
 var app = express();
+//config
+const config = require('./config');
+app.set('api_secret_key' , config.api_secret_key);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
